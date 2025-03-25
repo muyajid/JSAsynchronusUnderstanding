@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Praktek Promise</title>
+    <script>
+      function getApiUrl(keywoard) {
+        return `https://www.blibli.com/backend/search/products?searchTerm=$${keywoard}`;
+      }
+      function getApiKey(keywoard) {
+        const promise = new Promise(function (resolve, reject) {
+          const ajax = new XMLHttpRequest();
+          const api = getApiUrl(keywoard);
+
+          // Client request
+          ajax.open("GET", api);
+          // Send request to Server
+          ajax.send();
+
+          // Callback respon(
+          ajax.onload = () => {
+            // Variabel server respon
+            const serverRespon = JSON.parse(ajax.response);
+            if (ajax.status === 200) {
+              // Callback resolve and console data if succesful getdata
+              resolve(serverRespon);
+            } else {
+              // Callback reject and show eror message if un succesful getdata
+              reject("Gagal Mengambil Data");
+            }
+          };
+        });
+
+        // Return promise the results will be know in the future
+        // Program will be execute promise and waiting the state if succes promise return resolve jika tidak promise return reject
+        return promise;
+      }
+      // Button on click function
+      function onClickRun() {
+        const inpSearch = document.getElementById("inpSearch").value;
+
+        const myPromise = getApiKey(inpSearch);
+
+        // Callback resolve handling and manipulate data if state was resolve
+        myPromise
+          .then(function (data) {
+            alert("Data Produk Berhasil Di Ambil");
+            const products = data.data.products;
+            
+            const ulProducts = document.getElementById('ulProducts');
+
+            ulProducts.innerHTML = "";
+
+            products.forEach(products => {
+                const liProducts = document.createElement('li')
+                liProducts.textContent = products.name;
+                ulProducts.appendChild(liProducts);
+            });
+
+          }) // Callback reject handling eror if state was reject
+          .catch(function (eror) {
+            alert(`Terjadi Eror : ${eror}`);
+          }) // Execute program no matter whether program is succesful or not
+          .finally(() => {
+            console.info("Program Develop By Yazid");
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <input type="text" name="inpSearch" id="inpSearch" placeholder="Search" />
+    <button id="btnSearch" onclick="onClickRun()">Search</button>
+    <ul id="ulProducts"></ul>
+  </body>
+</html>
