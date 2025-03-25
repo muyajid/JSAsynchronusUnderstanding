@@ -1,5 +1,5 @@
 function getApiUrl(keywoard) {
-    return `https://www.blibli.com/backend/search/products?searchTerm=${keywoard}`;
+    return `https://www.blibli.com/backend/search/salah?searchTerm=${keywoard}`;
 }
 function getApiKey(keywoard) {
     console.log("Sending Request...")
@@ -12,6 +12,9 @@ function getApiKey(keywoard) {
     // Code membuat promise'
     // Argumen berupa function dengan parameter resolve yang nanti berisi argumen data yang kita dapat bila berhasil 
     // Dan reject parameter yang menerima function eror bawaan promise apabila terjadi eror 
+
+    // ngrim data ke .then di bawah
+    // ngirim eror ke .catch dibawah
     const promise = new Promise(function (resolve, reject) {
 
         // Saat kita send ke server maka program akan mencetak promise dengan status pending
@@ -26,7 +29,7 @@ function getApiKey(keywoard) {
                 resolve(serverRespon);
             } else {
                 // Jika datanya tidak berhasil didapat maka muncul eror
-                reject(Error("Gagal Mengambil Data Dari Server"))
+                reject("Gagal Mendapatkan Data Dari Server");
             }
         }
 
@@ -47,5 +50,13 @@ function btnClick() {
         // Saat request dari client berhasil mendapat respon maka function resolve akan di callback disini
         // .then menangkap data yang di dapat dari resolve
         console.log(value.data.products[0]);
+    }).catch(function(value) {
+        // Saat request dari client gagal mendapat respon dari server makan function reject() akan ter callback di .catch
+        // nah kemudian di .catch ini bisa kita tangani eror nya kita bisa  buat apa aja 
+        // catch menangkap pesan eror dari rejected untuk terserah kita apaain
+        alert(value);
+    }).finally(function() {
+        // .finally mau nanti stage nya resolve atau rejected finnaly akan tereksekusi
+        console.info("Develop by yazid arsy")
     })
 }
