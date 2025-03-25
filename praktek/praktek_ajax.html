@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktek Ajax</title>
+    <script>
+        function getApi(keywoard) {
+            return `https://www.blibli.com/backend/search/products?searchTerm=${keywoard}`;
+        }
+
+        function apiKey(keywoard, succes, eror) {
+            console.log('Sending Request..');
+
+            const ajax = new XMLHttpRequest();
+            const api = getApi(keywoard);
+
+            ajax.open('GET', api);
+            ajax.send();
+
+            ajax.onload = () => {
+                const serverRespon = JSON.parse(ajax.responseText);
+                if (ajax.status === 200) {
+                    console.log(serverRespon);
+                    succes();
+                } else {
+                    eror();
+                }
+            }
+
+        }
+
+        function responEror() {
+            console.error("Terjadi Eror");
+            alert("Terjadi Eror");
+        }
+
+        function responSucces() {
+            console.info("Data Berhasil Di Ambil");
+            alert("Data Berhasil Di Ambil");
+        }
+        function btnClick() {
+            const inpSearch = document.getElementById('inpSearch').value;
+            apiKey(inpSearch, () => {
+                responSucces();
+            }, () => {
+                responEror();
+            });
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="inpSearch" id="inpSearch" placeholder="search">
+    <button id="btnSearch" onclick="btnClick()">Search Produk</button>
+</body>
+</html>
