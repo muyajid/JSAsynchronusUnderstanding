@@ -47,17 +47,18 @@
           .then(function (data) {
             alert("Data Produk Berhasil Di Ambil");
             const products = data.data.products;
-            
-            const ulProducts = document.getElementById('ulProducts');
+
+            console.log(data);
+
+            const ulProducts = document.getElementById("ulProducts");
 
             ulProducts.innerHTML = "";
 
-            products.forEach(products => {
-                const liProducts = document.createElement('li')
-                liProducts.textContent = products.name;
-                ulProducts.appendChild(liProducts);
+            products.forEach((products) => {
+              const liProducts = document.createElement("li");
+              liProducts.textContent = products.name;
+              ulProducts.appendChild(liProducts);
             });
-
           }) // Callback reject handling eror if state was reject
           .catch(function (eror) {
             alert(`Terjadi Eror : ${eror}`);

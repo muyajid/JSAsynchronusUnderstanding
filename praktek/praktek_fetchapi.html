@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktek Fetch Api</title>
+    <script>
+        function getApiUrl() {
+            return `https://jsonplaceholder.typicode.com/users/`;
+        }
+        function findUser() {
+            const apiUrl = getApiUrl();
+            return fetch(apiUrl, {
+                method: 'GET'
+            });
+        }
+        function implApi() {
+            console.log(`Fetch api mengembalikan promise yang mana promise berjalan dalam proses asynchronus`);
+            
+            const api = findUser();
+            api
+                .then((dataPromise) => {return dataPromise.json()})
+
+                .then((dataUser) => {
+                    const user = dataUser;
+
+                    const inpSearch = document.getElementById('inpSearch').value;
+                    const pUsername = document.getElementById('pUsername');
+
+                    const findUsername = user.find(user => user.name === inpSearch);
+
+                    if(findUsername) {
+                        pUsername.textContent = `Halo namaku ${findUsername.name}`
+                        console.log(findUsername);
+                    } else {
+                        pUsername.textContent = `Yanto`;
+                    }
+                })
+                .catch((eror) => {
+                    pUsername.textContent = eror;
+                })
+                .finally(() => console.log("develop by yazid"));
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="inpSearch" id="inpSearch" placeholder="search products">
+    <button id="btnSearch" onclick="implApi()">Search Products</button>
+    <p id="pUsername"></p>
+</body>
+</html>

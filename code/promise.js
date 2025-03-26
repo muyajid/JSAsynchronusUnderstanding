@@ -43,16 +43,16 @@ function btnClick() {
     // Return promise itu kita simpan entah hasil nya resolve atau rejected 
     const promise = getApiKey(inpSearch.value);
     // Hasil dari promise bisa berupa 0 atau 1 resolve atau rejected nah .then itu adalah function untuk menangani 
-    // Hasil promise jika dia mengembalikan resolve atau berhasil mendapat data dari server dia akan di eksekusi apa bila resolve
+    // hasil promise jika dia mengembalikan resolve atau berhasil mendapat data dari server dia akan di eksekusi apa bila resolve
 
     // Hasil dari resolve
     promise.then(function(value) {
         // Saat request dari client berhasil mendapat respon maka function resolve akan di callback disini
-        // .then menangkap data yang di dapat dari resolve
+        // .then menangkap data yang di dapat dari resolve dan memanipulasi nya
         console.log(value.data.products[0]);
     }).catch(function(value) {
         // Saat request dari client gagal mendapat respon dari server makan function reject() akan ter callback di .catch
-        // nah kemudian di .catch ini bisa kita tangani eror nya kita bisa  buat apa aja 
+        // nah kemudian di .catch ini bisa kita tangani eror nya dan kita bisa bebas manipulasi
         // catch menangkap pesan eror dari rejected untuk terserah kita apaain
         alert(value);
     }).finally(function() {
