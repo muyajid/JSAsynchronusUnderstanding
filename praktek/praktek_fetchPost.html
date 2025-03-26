@@ -1,50 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Praktek Fetch Post</title>
     <script>
-        function getUrlApi() {
-            return `https://dummyjson.com/posts/add`;
-        }
-        function postFeed(inputTitle, inputUserId) {
-            const apiUrl = getUrlApi();
-            // POST method struktur
-            // headers menentukan format data yang akan kita kirim 
-            // body data yang kita kirim 
-            // JSON.stringify digunakan untuk konversi dari object JS ke JSON
+      function getUrlApi() {
+        return `https://dummyjson.com/posts/add`;
+      }
+      function postFeed(inputTitle, inputUserId) {
+        const apiUrl = getUrlApi();
+        // POST method struktur
+        // headers menentukan format data yang akan kita kirim
+        // body data yang kita kirim
+        // JSON.stringify digunakan untuk konversi dari object JS ke JSON
 
-            // feth mengembalikan promise
-            return fetch(apiUrl, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    title: inputTitle,
-                    userId: inputUserId
-                })
-            });
-        }
-        function implApi() {
-            const inpPost = document.getElementById('inpPost');
-            const inpUserId = document.getElementById('inpUserId');
-            const btnPost = document.getElementById('btnPost');
+        // feth mengembalikan promise
+        return fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: inputTitle,
+            userId: inputUserId,
+          }),
+        });
+      }
+      function implApi() {
+        const inpPost = document.getElementById("inpPost");
+        const inpUserId = document.getElementById("inpUserId");
+        const btnPost = document.getElementById("btnPost");
 
-            const apiPromise = postFeed(inpPost.value, inpUserId.value)
+        const apiPromise = postFeed(inpPost.value, inpUserId.value);
 
-            apiPromise
-                //Respon setelah kita request send data ke server
-                .then((serverRespon) => {return serverRespon.json()})
-                .then((dataJson) => {
-                    console.log(dataJson);
-                })
-                .catch(responEror => console.error(responEror))
-        }
+        apiPromise
+          //Respon setelah kita request send data ke server
+          .then((serverRespon) => {
+            return serverRespon.json();
+          })
+          .then((dataJson) => {
+            console.log(dataJson);
+
+            const pTitlePost = document.getElementById("pTitlePost");
+            const pUserId = document.getElementById("pUserId");
+
+            pTitlePost.textContent = `Postingan Terbaru = ${dataJson.title}`;
+            pUserId.textContent = `Account = ${dataJson.userId}`;
+          })
+          .catch((responEror) => console.error(responEror));
+      }
     </script>
-</head>
-<body>
-    <input type="text" name="inputPost" id="inpPost" placeholder="post">
-    <input type="text" name="inputUserId" id="inpUserId" placeholder="user id">
-    <button id="btnPost" onclick="implApi()">Post</button>
-</body>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #e7ecf0;
+        margin: 0;
+      }
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: left;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        resize: none;
+        height: 100px;
+        outline: none;
+        transition: 0.2s;
+      }
+      textarea:focus {
+        border-color: #1da1f2;
+        box-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+      }
+      .post-button {
+        width: 100%;
+        padding: 12px;
+        background-color: #1da1f2;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        transition: 0.2s;
+      }
+      .post-button:hover {
+        background-color: #0d8ae0;
+      }
+      .post-result {
+        margin-top: 15px;
+        font-size: 16px;
+        color: #333;
+        background: #f5f8fa;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">Buat Postingan</div>
+      <textarea id="inpPost" placeholder="Apa yang sedang terjadi?"></textarea>
+      <input type="text" id="inpUserId" placeholder="User ID" />
+      <button class="post-button" onclick="implApi()">Post</button>
+      <div class="post-result">
+        <p id="pTitlePost"></p>
+        <p id="pUserId"></p>
+      </div>
+    </div>
+  </body>
 </html>
