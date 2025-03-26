@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktek Fetch Post</title>
+    <script>
+        function getUrlApi() {
+            return `https://dummyjson.com/posts/add`;
+        }
+        function postFeed(inputTitle, inputUserId) {
+            const apiUrl = getUrlApi();
+            // POST method struktur
+            // headers menentukan format data yang akan kita kirim 
+            // body data yang kita kirim 
+            // JSON.stringify digunakan untuk konversi dari object JS ke JSON
+
+            // feth mengembalikan promise
+            return fetch(apiUrl, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: inputTitle,
+                    userId: inputUserId
+                })
+            });
+        }
+        function implApi() {
+            const inpPost = document.getElementById('inpPost');
+            const inpUserId = document.getElementById('inpUserId');
+            const btnPost = document.getElementById('btnPost');
+
+            const apiPromise = postFeed(inpPost.value, inpUserId.value)
+
+            apiPromise
+                //Respon setelah kita request send data ke server
+                .then((serverRespon) => {return serverRespon.json()})
+                .then((dataJson) => {
+                    console.log(dataJson);
+                })
+                .catch(responEror => console.error(responEror))
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="inputPost" id="inpPost" placeholder="post">
+    <input type="text" name="inputUserId" id="inpUserId" placeholder="user id">
+    <button id="btnPost" onclick="implApi()">Post</button>
+</body>
+</html>

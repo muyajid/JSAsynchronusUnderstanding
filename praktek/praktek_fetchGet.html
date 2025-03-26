@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktek Fetch Get</title>
+    <script>
+        function getApiUrl() {
+            return `https://dummyjson.com/quotes`;
+        }
+        function getQuotes() {
+            const api = getApiUrl();
+            return fetch(api, {
+                method: 'GET'
+            })
+        }
+        function implApi() {
+            console.log(`Ini Proses Asynchronus`);
+
+            const serverRespon = getQuotes();
+
+            serverRespon
+                .then((data) => {return data.json()})
+
+                .then((dataJSON) => {
+                    const randomIndex = Math.floor(Math.random() * (10 - 1 + 1));
+                    console.log(randomIndex);
+                    
+                    const randomQuotes = dataJSON.quotes[randomIndex];
+
+                    const pQuote = document.getElementById('pQuote');
+                    pQuote.textContent = "";
+                    pQuote.textContent = `${randomQuotes.quote} - ${randomQuotes.author}`;
+                    console.log(randomQuotes);
+                    
+                })
+
+                .catch((dataJSON) => {
+                    console.error(Error("Terjadi Eror = Gagal Ambil Data"));
+                })
+
+                .finally(() => {console.info("Develop By Yazid")});
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+    
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+    
+        button:hover {
+            background-color: #0056b3;
+        }
+    
+        #pQuote {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <button id="btnGenerateQuotes" onclick="implApi()">Get Quotes</button>
+    <p id="pQuote"></p>
+    <p></p>
+</body>
+</html>
