@@ -3,10 +3,9 @@ function getApiUrl() {
 }
 function authLogin(username, password) {
     const apiUrl = getApiUrl();
-    
     return new Promise((resolve, reject) => {
         const ajax = new XMLHttpRequest();
-
+        
         ajax.open('POST', apiUrl);
         ajax.setRequestHeader("Content-Type", "application/json");
         const body = JSON.stringify({

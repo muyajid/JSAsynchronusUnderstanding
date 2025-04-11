@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01_praktek_fetchGet</title>
+    <script>
+        function getApiEndpoint() {
+            return `https://dummyjson.com/quotes`;
+        }
+        async function getRandomQuotes() {
+            
+            try {
+                const response = await fetch(getApiEndpoint()); 
+                const data = await response.json();        
+                
+                const pQuotes = document.getElementById('pQuotes');
+
+                let randomIndex = Math.floor(Math.random() * data.quotes.length);
+                const quote = data.quotes[randomIndex].quote;
+                pQuotes.textContent = quote;
+
+                console.log(quote);
+                
+            } catch (error) {
+                console.error(`Gagal Mendapat Quotes ${error}`)
+                alert(`Gagal Mendapat Quotes ${error()}`);
+            }
+        }
+    </script>
+    <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: #f0f4f8;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          margin: 0;
+        }
+    
+        p#pQuotes {
+          font-size: 1.5rem;
+          font-style: italic;
+          color: #333;
+          text-align: center;
+          max-width: 600px;
+          margin: 20px;
+          padding: 10px 20px;
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    
+        button#btnQuotes {
+          padding: 10px 25px;
+          font-size: 1rem;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+        }
+    
+        button#btnQuotes:hover {
+          background-color: #0056b3;
+        }
+      </style>
+</head>
+<body>
+    <p id="pQuotes"></p>
+    <button id="btnQuotes" onclick="getRandomQuotes()">Get Random Quotes</button>
+</body>
+</html>

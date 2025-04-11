@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02_praktek_ajaxPos</title>
+    <script>
+      function getApiEndpoint() {
+        return `https://dummyjson.com/auth/login`;
+      }
+      function login(username, password) {
+        return new Promise((resolve, reject) => {
+          const ajax = new XMLHttpRequest();
+          const url = getApiEndpoint();
+
+          ajax.open("POST", url);
+          ajax.setRequestHeader("Content-Type", "application/json");
+
+          const body = JSON.stringify({
+            username: username,
+            password: password,
+          });
+
+          ajax.send(body);
+
+          ajax.onload = function () {
+            if (ajax.status === 200) {
+              const req = JSON.parse(ajax.responseText);
+              resolve(req);
+            } else {
+              reject(ajax.statusText);
+            }
+          };
+        });
+      }
+      async function implApi() {
+        const usernameInput = document.getElementById("usernameInput");
+        const passwordInput = document.getElementById("passwordInput");
+        const displayUsername = document.getElementById("username");
+
+        try {
+          const res = await login(usernameInput.value, passwordInput.value);
+          displayUsername.textContent = `Welcome ${res.username}`;
+          console.log(res);
+          localStorage.setItem("USERNAME", res.accessToken);
+        } catch (error) {
+          console.error(`Gagal Login ${error}`);
+          alert(`Gagal Login Pesan : ${error}`);
+        }
+      }
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+      }
+
+      .login-form h2 {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .message {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .message a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .message a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form class="login-form" onsubmit="event.preventDefault(); implApi();">
+        <h2>Login</h2>
+        <div class="input-group">
+          <label for="usernameInput">Username</label>
+          <input type="text" id="usernameInput"/>
+        </div>
+        <div class="input-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" />
+        </div>
+        <button type="submit">Masuk</button>
+        <p class="message">Belum punya akun? <a href="#">Daftar</a></p>
+      </form>
+      <h1 id="username" style="text-align: center; margin-top: 10px"></h1>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktek Async Await</title>
+    <script>
+        function getApiEndpoint() {
+            return `https://dummyjson.com/products`;
+        }
+        function getAllProducts() {
+            return new Promise((resolve, reject) => {
+                const ajax = new XMLHttpRequest();
+                const api = getApiEndpoint();
+
+                ajax.open('GET', api);
+                ajax.send();
+
+                ajax.onload = () => {
+                    if (ajax.status === 200) {
+                        resolve(ajax.responseText);
+                    } else {
+                        reject(ajax.responseText);
+                    }
+                }
+            })
+        }
+        async function btnGetProduct() {
+            try {
+                const serverRespon = await getAllProducts();
+                const data = JSON.parse(serverRespon);
+
+                const pList = document.getElementById('productList');
+                data.products.forEach(products => {
+                    const p = document.createElement('p');
+                    p.textContent = products.title;
+                    pList.appendChild(p);
+                });
+            } catch (error) {
+                console.error(`Gagal Menambil Data ${error}`)
+            }
+        }
+        btnGetProduct()
+    </script>
+</head>
+<body>
+    <ul id="productList">
+
+    </ul>
+</body>
+</html>
