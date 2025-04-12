@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        //Web Beresiko Lemot
+        // function showLog(total) {
+        //     for(let i = 0; i < total; i++) {
+        //         console.log(i);
+                
+        //     }
+        // }
+        // function buttonOnclick() {
+        //     console.log(`Start Log`);
+        //     showLog(20000);
+        //     console.log(`Finish Log`);
+        // }
+
+        //Web worker menjalankan code programn di thread yang berbeda
+
+        //Membuat web-worker
+        const worker = new Worker("web-worker.js");
+        //
+        worker.addEventListener('message', function(event) {
+            document.getElementById('p').textContent = `${event.data}`;
+        })
+        function buttonOnclick() {
+            console.log(`Start Log`);
+            worker.postMessage(5);
+            console.log(`Finish Log`);
+        }
+    </script>
+</head>
+<body>
+    <button onclick="buttonOnclick()">Start Log</button>
+    <p id="p"></p>
+</body>
+</html>
