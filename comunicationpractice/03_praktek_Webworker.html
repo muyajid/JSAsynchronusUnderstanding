@@ -5,50 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>03 praktek Web Worker</title>
     <script>
+      // class untuk menampung product
       class Product {
+        // simpan data yang di dapat dari server
         constructor(imgUrl, productName, productPrice) {
           this.img = imgUrl;
           this.name = productName;
           this.price = productPrice;
         }
-
+        // method untuk nampilin data ke elemen HTML
         render() {
+          // buat elemen div untuk menampung aset gambar dan tulisan
           const productContainer = document.createElement('div');
+          // beri class untuk elemen div
           productContainer.classList.add('product');
 
+          //  buat elemen img untuk menampilkan data gambar
           const displayImg = document.createElement('img');
+          // menampilkan data
           displayImg.src = this.img;
 
+          // buat elemen h1 untuk menampilkan data nama barang
           const displayProductName = document.createElement('h1');
+          // menampilkan
           displayProductName.textContent = this.name;
 
+          // buat elemen p untuk menampilkan data harga barang
           const displayPrice = document.createElement('p');
+          // menampilkan
           displayPrice.textContent = this.price;
 
+          // masukan elemen img, h1 dan p yang sudah di buat ke dalam div yang menampung aset tadi
           productContainer.appendChild(displayImg);
           productContainer.appendChild(displayProductName);
           productContainer.appendChild(displayPrice);
 
+          // kembalikan div
           return productContainer;
         }
       }
 
+      // function yang berisi api endpoint
       function getApiEndpoint(search) {
         return `https://dummyjson.com/products/search?q=${search}`;
       }
 
+      // function untuk melakukan pencarian produk
       function searchProduct() {
+        // elemen input text html digunakan untuk input produk yang dicari
         const inputProduct = document.getElementById('inputProduct').value;
+        // variable yang menampung apienpoint tadi query nya diisi elemen input
         const api = getApiEndpoint(inputProduct);
 
+        // deklarasi web worker
         const worker = new Worker('03_praktek_Webworker.js');
+        // mengirim variable api untuk di fetching di worker
         worker.postMessage(api);
 
+        // menangkap hasil dari proses fetching di worker
         worker.addEventListener("message", function(event) {
+          // menyimpan hasil nya
           const productData = event.data.products;
 
+          // foreach untuk memudahkan mengakases key key JSON nya
           productData.forEach(data => {
+            // display data ke elemen HTML
+            // memasukan data yang di dapat
             const displayProduct = new Product(data.thumbnail, data.title, data.price);
+            // menampilkan data dalam elemen HTML
             document.querySelector('.product-wrapper').appendChild(displayProduct.render());
           });
         })
