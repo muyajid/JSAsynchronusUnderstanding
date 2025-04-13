@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>03 praktek Web Worker</title>
+    <script>
+      class Product {
+        constructor(imgUrl, productName, productPrice) {
+          this.img = imgUrl;
+          this.name = productName;
+          this.price = productPrice;
+        }
+
+        render() {
+          const productContainer = document.createElement('div');
+          productContainer.classList.add('product');
+
+          const displayImg = document.createElement('img');
+          displayImg.src = this.img;
+
+          const displayProductName = document.createElement('h1');
+          displayProductName.textContent = this.name;
+
+          const displayPrice = document.createElement('p');
+          displayPrice.textContent = this.price;
+
+          productContainer.appendChild(displayImg);
+          productContainer.appendChild(displayProductName);
+          productContainer.appendChild(displayPrice);
+
+          return productContainer;
+        }
+      }
+
+      function getApiEndpoint(search) {
+        return `https://dummyjson.com/products/search?q=${search}`;
+      }
+
+      function searchProduct() {
+        const inputProduct = document.getElementById('inputProduct').value;
+        const api = getApiEndpoint(inputProduct);
+
+        const worker = new Worker('03_praktek_Webworker.js');
+        worker.postMessage(api);
+
+        worker.addEventListener("message", function(event) {
+          const productData = event.data.products;
+
+          productData.forEach(data => {
+            const displayProduct = new Product(data.thumbnail, data.title, data.price);
+            document.querySelector('.product-wrapper').appendChild(displayProduct.render());
+          });
+        })
+      }
+
+    </script>
+    <style>
+      .product-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .product {
+        border: 1px solid #ccc;
+        padding: 8px;
+        width: 200px;
+        text-align: center;
+      }
+      .product img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <input type="text" name="inputProduct" id="inputProduct" placeholder="search product">
+    <button id="btnSearch" onclick="searchProduct()">Search Product</button>
+
+    <div class="product-wrapper">
+    </div>
+  </body>
+</html>
