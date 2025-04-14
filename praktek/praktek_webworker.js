@@ -14,6 +14,6 @@ addEventListener("message", async function (event) {
             postMessage(`Terjadi Eror : ${error}`);
           }
     } else {
-        console.log("Hello");
+      postMessage("Tidak Ada Perintah Req Ke Server");
     }
 });
