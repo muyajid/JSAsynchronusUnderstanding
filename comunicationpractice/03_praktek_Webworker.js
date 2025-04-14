@@ -10,6 +10,9 @@ addEventListener("message", async function (event) {
         postMessage(res);
     } catch (err) {
         // mengirim status eror bila terjadi eror
-        postMessage(`Terjadi Eror : ${err}`);
+        postMessage({
+            eror: true,
+            message: `Telah Terjadi Eror ${err}`
+        });
     }
 })
